@@ -58,7 +58,7 @@ def hello: Unit = {
         
 
     def t2(tr: T):T = tr match
-        case Branch(l, r) => Branch(t(l), t(r))
+        case Branch(l, r) => Branch(t2(l), t2(r))
         case Nope => Branch(Nope, Nope)
 
     abstract class L 
@@ -67,16 +67,8 @@ def hello: Unit = {
 
     def b(l : L): L = l match 
         case Maybe => Maybe
-        case LBranch(l) => LBranch(b(l))
-    /*
-    Macros.show(( x : TreesTest.ATree) => {
-        x match {
-            case TreesTest.ABranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => TreesTest.BBLeaf(a,b)
-            case TreesTest.ABranch(l, r) => TreesTest.BBranch(f(l), f(r)) 
-            case TreesTest.ALeaf(a) => TreesTest.BLeaf(a)
-        }}
-    )
-    */
+        case LBranch(l) => LBranch(b(l)) 
+
     //Macros.show(f)
     //Macros.show(h)
     val f2 = {def s1(simple : S): T = simple match {
@@ -90,8 +82,8 @@ def hello: Unit = {
     //Macros.inverse(b)
     //Macros.inverse(h)
     //Macros.inverse(s)
-    //Macros.inverse(t)
-    Macros.inverse(d)
+    Macros.inverse(t)
+    //Macros.inverse(f)
     //println(Macros.inverse(s)(s(Yope)))
     //Macros.show()
     //Macros.show(s)
