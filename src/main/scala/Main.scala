@@ -14,7 +14,7 @@ def hello: Unit = {
 
     def f( x : W) : V = {
         x match {
-            case Wranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => VVeaf(a,b)
+            case Wranch(Weaf(a), Weaf(b)) => VVeaf(a,b)
             case Wranch(l, r) => Vranch(f(l), f(r)) 
             case Weaf(a) => Veaf(a)
         }
