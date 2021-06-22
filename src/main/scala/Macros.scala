@@ -61,7 +61,9 @@ object Macros {
             tree match {
                 case DefDef(functionName, params, typeTree, body) =>
                     // Here is the other print for the body
-                    println(s"Original body is $body")
+                    println(s"Original body:")
+                    println(body)
+                    println("==========================")
                     if(params.size != 1)
                         throw new Error("Function should only have one parameter")
                     val inputDefinition = params.head.params.head
@@ -138,7 +140,8 @@ object Macros {
                     // (and it is correct otherwise it would throw)
                     res.asExpr.asInstanceOf[B]
                     // This is the result obtained
-                    println(s"Final match is $res")
+                    println(s"Final match:")
+                    println(res)  
                     res
                 case _ => throw new Error("Only simple identifier is accepted as scrutinee for match")
             }

@@ -2,20 +2,23 @@ import TreesTest.*
 import scala.tasty.inspector.*
 @main 
 def hello: Unit = {
-    def f( x : TreesTest.ATree) : TreesTest.BTree = {
+
+    abstract class W 
+    case class Wranch(l : W, r : W) extends W
+    case class Weaf(a : Int) extends W
+
+    abstract class V
+    case class Vranch(l : V, r : V) extends V
+    case class Veaf(a : Int) extends V
+    case class VVeaf(a : Int, b : Int) extends V
+
+    def f( x : W) : V = {
         x match {
-            case TreesTest.ABranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => TreesTest.BBLeaf(a,b)
-            case TreesTest.ABranch(l, r) => TreesTest.BBranch(f(l), f(r)) 
-            case TreesTest.ALeaf(a) => TreesTest.BLeaf(a)
+            case Wranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => VVeaf(a,b)
+            case Wranch(l, r) => Vranch(f(l), f(r)) 
+            case Weaf(a) => Veaf(a)
         }
     }
-     val f1 : TreesTest.ATree => TreesTest.BTree = ( x : TreesTest.ATree) => {
-        x match {
-            case TreesTest.ABranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => TreesTest.BBLeaf(a,b)
-            case TreesTest.ABranch(l, r) => TreesTest.BBranch(f(l), f(r)) 
-            case TreesTest.ALeaf(a) => TreesTest.BLeaf(a)
-        }
-    } 
 
     abstract class Atest
     case class AFoo(a: Int, b : Int) extends Atest
@@ -53,8 +56,9 @@ def hello: Unit = {
     }
 
     def t(tr: T):T = tr match
-        case Nope => Nope
         case Branch(l, r) => Branch(t(l), t(r))
+        case Nope => Nope
+        
         
 
     def t2(tr: T):T = tr match
@@ -66,54 +70,22 @@ def hello: Unit = {
     case object Maybe extends L
 
     def b(l : L): L = l match 
-        case Maybe => Maybe
         case LBranch(l) => LBranch(b(l)) 
 
-    //Macros.show(f)
-    //Macros.show(h)
-    val f2 = {def s1(simple : S): T = simple match {
-                case Yope => Nope
-            }
-            s1
-        }
-    //val sTest = Macros.inverse(s)
-    //Macros.inverse(f)
-    //def s1(notSimple : T): S = Macros.inverseBody(s, s1, notSimple)
-    //Macros.inverse(b)
-    //Macros.inverse(h)
-    //Macros.inverse(s)
-    Macros.inverse(t)
-    //Macros.inverse(f)
-    //println(Macros.inverse(s)(s(Yope)))
-    //Macros.show()
-    //Macros.show(s)
-    //Macros.show(t) 
-    //Macros.show(j)
-    /*
-    print("=================")
-    Macros.show(( x : TreesTest.ATree) => {
-        x match {
-            case ALeaf(a) => BLeaf(a)
-        }}
-    )
-    /*
-    println("===============")
-    Macros.show(f)
-    Macros.show(f1)
-    println("===============")
-    Macros.show(TreesTest.f)
-    Macros.show(TreesTest.f1)
-    println("===============")
     
-    Macros.show((x:ATree)=>{
-        x match {
-            case TreesTest.ABranch(TreesTest.ALeaf(a), TreesTest.ALeaf(b)) => TreesTest.BBLeaf(a,b)
-            case TreesTest.ABranch(l, r) => TreesTest.BBranch(f(l), f(r)) 
-            case TreesTest.ALeaf(a) => TreesTest.BLeaf(a)
-        }}:BTree)
-    */
-    //val tastyFiles = List("target/scala-3.0.0-RC2/classes/TreesTest.tasty")*/
-    //TastyInspector.inspectTastyFiles(tastyFiles)(new MyInspector)*/
+    // Succeed
+    // Macros.inverse(b)
+    // Macros.inverse(h)
+    // Macros.inverse(s)
+    // Macros.inverse(t)
+    // Macros.inverse(t2)
+
+    // Should (but shouldn't) fail 
+    // This is due to a case not being covered
+    // Macros.inverse(f)
+    
+    // Should (and does) fail 
+    // Macros.inverse(j)
 }
 
 def msg = "I was compiled by Scala 3. :)"
